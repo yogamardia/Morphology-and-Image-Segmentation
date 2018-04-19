@@ -81,7 +81,7 @@ function dilateBtn_Callback(hObject, eventdata, handles)
 global img
 global dil
 
-dil = bwmorph(img,'dilate',
+
 
 
 % --- Executes on button press in erodeBtn.
