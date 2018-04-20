@@ -169,6 +169,31 @@ function sobelBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to sobelBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+
+bin = im2bw(img,graythresh(img));
+sobHor = edge(bin,'sobel','horizontal');
+sobVer = edge(bin,'sobel','vertical');
+sobGmag = imgradient(bin,'sobel');
+
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(sobHor);
+val = sprintf('Sobel Horizontal');
+set(handles.st2, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb3);
+imshow(sobVer);
+val = sprintf('Sobel Vertical');
+set(handles.st3, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb4);
+imshow(sobGmag);
+val = sprintf('Sobel Gradient Magnitude');
+set(handles.st4, 'String', val);
+
 
 
 % --- Executes on button press in robertBtn.
@@ -176,20 +201,81 @@ function robertBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to robertBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
 
+bin = im2bw(img,graythresh(img));
+rbHor = edge(bin,'roberts','horizontal');
+rbVer = edge(bin,'roberts','vertical');
+rbGmag = imgradient(bin,'roberts');
+
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(rbHor);
+val = sprintf('Roberts Horizontal');
+set(handles.st2, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb3);
+imshow(rbVer);
+val = sprintf('Roberts Vertical');
+set(handles.st3, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb4);
+imshow(rbGmag);
+val = sprintf('Roberts Gradient Magnitude');
+set(handles.st4, 'String', val);
 
 % --- Executes on button press in prewittBtn.
 function prewittBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to prewittBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
 
+bin = im2bw(img,graythresh(img));
+pwHor = edge(bin,'prewitt','horizontal');
+pwVer = edge(bin,'prewitt','vertical');
+pwGmag = imgradient(bin,'prewitt');
+
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(pwHor);
+val = sprintf('Prewitt Horizontal');
+set(handles.st2, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb3);
+imshow(pwVer);
+val = sprintf('Prewitt Vertical');
+set(handles.st3, 'String', val);
+
+guidata(hObject,handles);
+axes(handles.pb4);
+imshow(pwGmag);
+val = sprintf('Prewitt Gradient Magnitude');
+set(handles.st4, 'String', val);
 
 % --- Executes on button press in cannyBtn.
 function cannyBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to cannyBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+
+bin = im2bw(img,graythresh(img));
+can = edge(bin,'canny');
+
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(can);
+val = sprintf('Canny');
+% null = sprintf(' ');
+set(handles.st2, 'String', val);
+% set(handles.st3, 'String', null);
+% set(handles.st4, 'String', null);
+% cla(handles.pb3);
+% cla(handles.pb4);
 
 
 % --- Executes on button press in logBtn.
@@ -197,6 +283,21 @@ function logBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to logBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+
+bin = im2bw(img,graythresh(img));
+log = edge(bin,'log');
+
+axes(handles.pb3);
+imshow(log);
+
+val = sprintf('Laplacian of Gaussian (LOG)');
+% null = sprintf(' ');
+set(handles.st3, 'String', val);
+% set(handles.st3, 'String', null);
+% set(handles.st4, 'String', null);
+% cla(handles.pb3);
+% cla(handles.pb4);
 
 
 % --- Executes on button press in browseBtn.
