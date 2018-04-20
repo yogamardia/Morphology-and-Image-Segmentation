@@ -81,8 +81,15 @@ function dilateBtn_Callback(hObject, eventdata, handles)
 global img
 global dil
 
+bin = im2bw(img,graythresh(img) );
+se = ones(3, 3);
+dil = bwmorph(bin,'dilate', se);
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(dil);
 
-
+val = sprintf('Dilasi');
+set(handles.st2, 'String', val);
 
 % --- Executes on button press in erodeBtn.
 function erodeBtn_Callback(hObject, eventdata, handles)

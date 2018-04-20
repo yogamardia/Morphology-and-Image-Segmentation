@@ -81,14 +81,33 @@ function dilateBtn_Callback(hObject, eventdata, handles)
 global img
 global dil
 
-dil = bwmorph(img,'dilate',
+bin = im2bw(img,graythresh(img) );
+se = ones(3, 3);
+dil = imdilate(bin, se);
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(dil);
 
+val = sprintf('Dilation');
+set(handles.st2, 'String', val);
 
 % --- Executes on button press in erodeBtn.
 function erodeBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to erodeBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+global ero
+
+bin = im2bw(img,graythresh(img) );
+se = ones(3, 3);
+ero = imerode(bin, se);
+guidata(hObject,handles);
+axes(handles.pb3);
+imshow(ero);
+
+val = sprintf('Erosion');
+set(handles.st3, 'String', val);
 
 
 % --- Executes on button press in openBtn.
@@ -96,6 +115,18 @@ function openBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to openBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+global op
+
+bin = im2bw(img,graythresh(img) );
+se = ones(3, 3);
+op = imopen(bin, se);
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(op);
+
+val = sprintf('Opening');
+set(handles.st2, 'String', val);
 
 
 % --- Executes on button press in closeBtn.
@@ -103,6 +134,17 @@ function closeBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to closeBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+global cl
+bin = im2bw(img,graythresh(img));
+se = ones(3, 3);
+cl = imclose(bin, se);
+guidata(hObject,handles);
+axes(handles.pb3);
+imshow(cl);
+
+val = sprintf('Closing');
+set(handles.st3, 'String', val);
 
 
 % --- Executes on button press in thinBtn.
@@ -110,6 +152,16 @@ function thinBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to thinBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img
+global thin
+bin = im2bw(img,graythresh(img));
+thin = bwmorph(bin,'thin',Inf);
+guidata(hObject,handles);
+axes(handles.pb2);
+imshow(thin);
+
+val = sprintf('Thinning');
+set(handles.st2, 'String', val);
 
 
 % --- Executes on button press in sobelBtn.
