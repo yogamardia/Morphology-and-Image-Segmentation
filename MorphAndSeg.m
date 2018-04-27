@@ -306,12 +306,20 @@ function browseBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global img;
-[nama_file, nama_path] = uigetfile('*.png;*.jpg;*.bmp;*.gif','Select Image');
+[nama_file, nama_path] = uigetfile('*.png;*.jpg;*.bmp;*.gif;*.tif','Select Image');
 if ~isequal (nama_file,0)
     img = imread(fullfile(nama_path,nama_file));
     guidata(hObject,handles);
     axes(handles.pb1);
     imshow(img);
+    
+    null = sprintf(' ');
+    set(handles.st2, 'String', null);
+    set(handles.st3, 'String', null);
+    set(handles.st4, 'String', null);
+    cla(handles.pb2);
+    cla(handles.pb3);
+    cla(handles.pb4);
 else
     return;
 end
@@ -321,6 +329,32 @@ function reggrowBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to reggrowBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img;
+bin = im2bw(img,graythresh(img));
+f=double(bin);
+s=255;
+t=65;
+if numel(s)==1
+    si=f==s;
+    s1=s;
+else
+    si=bwmorph(s,'shrink',Inf);
+    j=si;
+    s1=f(j);
+end
+
+ti=false(size(f));
+
+for k=1:length(s1)
+    sv=s1(k);
+    s=abs(f-sv)<=t;
+    ti=ti|s;
+end
+rg = bwlabel(imreconstruct(si,ti));
+axes(handles.pb2);
+imshow(rg);
+val = sprintf('Region Growing');
+set(handles.st2, 'String', val);
 
 
 % --- Executes on button press in watershedBtn.
@@ -328,6 +362,15 @@ function watershedBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to watershedBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global img;
+bin = im2bw(img,graythresh(img));
+dist = bwdist(bin);
+ws = watershed(dist);
+ws = label2rgb(ws, 'spring', 'c', 'shuffle');
+axes(handles.pb3);
+imshow(ws);
+val = sprintf('Watershed');
+set(handles.st3, 'String', val);
 
 
 % --- Executes on button press in exitBtn.
