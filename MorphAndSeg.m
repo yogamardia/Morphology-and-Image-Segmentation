@@ -82,7 +82,7 @@ global img
 global dil
 
 bin = im2bw(img,graythresh(img) );
-se = ones(3, 3);
+se = ones(3,3);
 dil = imdilate(bin, se);
 guidata(hObject,handles);
 axes(handles.pb2);
@@ -100,7 +100,7 @@ global img
 global ero
 
 bin = im2bw(img,graythresh(img) );
-se = ones(3, 3);
+se = ones(3,3);
 ero = imerode(bin, se);
 guidata(hObject,handles);
 axes(handles.pb3);
@@ -119,7 +119,7 @@ global img
 global op
 
 bin = im2bw(img,graythresh(img) );
-se = ones(3, 3);
+se = ones(3,3);
 op = imopen(bin, se);
 guidata(hObject,handles);
 axes(handles.pb2);
@@ -137,7 +137,7 @@ function closeBtn_Callback(hObject, eventdata, handles)
 global img
 global cl
 bin = im2bw(img,graythresh(img));
-se = ones(3, 3);
+se = ones(3,3);
 cl = imclose(bin, se);
 guidata(hObject,handles);
 axes(handles.pb3);
@@ -330,29 +330,51 @@ function reggrowBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global img;
-bin = im2bw(img,graythresh(img));
-f=double(bin);
-s=255;
-t=65;
-if numel(s)==1
-    si=f==s;
-    s1=s;
-else
-    si=bwmorph(s,'shrink',Inf);
-    j=si;
-    s1=f(j);
+% bin = im2bw(img,graythresh(img));
+% f=double(bin);
+% s=255;
+% t=65;
+% if numel(s)==1
+%     si=f==s;
+%     s1=s;
+% else
+%     si=bwmorph(s,'shrink',Inf);
+%     j=si;
+%     s1=f(j);
+% end
+% 
+% ti=false(size(f));
+% 
+% for k=1:length(s1)
+%     sv=s1(k);
+%     s=abs(f-sv)<=t;
+%     ti=ti|s;
+% end
+% rg = bwlabel(imreconstruct(si,ti));
+% axes(handles.pb2);
+% imshow(rg);
+% val = sprintf('Region Growing');
+% set(handles.st2, 'String', val);
+x = 127;    %koordinat awal/seed x
+y = 127;    %koordinat awal/seed y
+threshold = 65; %threshold
+
+Phi = false(size(img,1),size(img,2));
+ref = true(size(img,1),size(img,2));
+PhiOld = Phi;
+Phi(uint8(x),uint8(y)) = 1;
+while(sum(Phi(:)) ~= sum(PhiOld(:)))
+    PhiOld = Phi;
+    segm_val = img(Phi);
+    meanSeg = mean(segm_val);
+    posVoisinsPhi = imdilate(Phi,strel('disk',1,0)) - Phi;
+    voisins = find(posVoisinsPhi);
+    valeursVoisins = img(voisins);
+    Phi(voisins(valeursVoisins > meanSeg - threshold & valeursVoisins < meanSeg + threshold)) = 1;
 end
 
-ti=false(size(f));
-
-for k=1:length(s1)
-    sv=s1(k);
-    s=abs(f-sv)<=t;
-    ti=ti|s;
-end
-rg = bwlabel(imreconstruct(si,ti));
-axes(handles.pb2);
-imshow(rg);
+axes(handles.pb2), imshow(Phi);
+guidata(hObject,handles);
 val = sprintf('Region Growing');
 set(handles.st2, 'String', val);
 
